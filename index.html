@@ -5,10 +5,23 @@
   <title>Giant Bomb Test</title>
   <script src="http://code.jquery.com/jquery-2.1.1.js"></script>
   <script src="app.js"></script>
+  <link rel="stylesheet" href="main.css">
+  <script src="js\Chart.js-master\Chart.js"></script>
 </head>
 <body>
-   	<h1>Game Search</h1>
-    <input id="game" type="text" /><button id="search">Search</button>
-    <div id="myelement"></div>
+	<div id="searchContainer">
+		<div id="searchBox">
+   			<h1>Game Search</h1>
+    		<input id="game" type="text" /><button id="search">Search</button>
+		</div>
+    	<div id="numResults"></div>
+    	<div id="searchResults">
+    		<div class="searchResultsItem"></div>
+    	</div>
+    </div>
+    <div id="resultsContainer">
+    	<div id="numGames"></div>
+    	<canvas id="myChart" width="500" height="400"></canvas>
+    </div>
 </body>
 </html>
