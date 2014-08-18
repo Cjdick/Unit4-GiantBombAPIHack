@@ -13,10 +13,13 @@ var noDateAvailable
 
 $(document).ready(function() {
     $(document).on('click','#search', function() {
-    	//$('.searchResultsItem').remove();
-    	if ($("#characterSearch").val() != "") {
+    	if ($("#characterSearch").val() != "" && $("#characterSearch").val() != query) {
     		console.log($("#characterSearch").val());
     		query = $("#characterSearch").val();
+    		$(".searchResultsItem").remove();
+    		$('#searchResults').append('<div class="searchResultsItem"></div>');
+    		$('#numResults').find('p').remove();
+    		$("#loadingImageResults").show();
 		    $.ajax ({
 		        type: 'GET',
 		        dataType: 'jsonp',
@@ -28,22 +31,46 @@ $(document).ready(function() {
 		            console.log('done');
 		        },
 		        success: function(data) {
+		        	$("#loadingImageResults").hide();
 		            console.log(data);
 		            console.log(data.number_of_total_results);
-		            $('#numResults').append('Found ' + data.number_of_total_results + ' results for ' + query);
+		            $('#numResults').append('<p>Found ' + data.number_of_total_results + ' results for ' + query + '</p>');
 		            characters = data.results;
 		            $.each(characters, function(index, character) {
-		                $('#searchResults').append('<div class="searchResultsItem"><div class="searchResultsImage"><img src="' + character.image.icon_url + '" /></div><div class="searchResultsText"><h1>' + character.name + '</h1><p>' + character.deck + '</p></div></div>');
+		            	//console.log(typeof(character.image.icon_url) != 'undefined' && character.image.icon_url != null);
+		            	//console.log(!($.isEmptyObject(character.image.icon_url)));
+		            	//console.log(character.image === null);
+		            	if(!(character.image === null)) { //!($.isEmptyObject(character.image.icon_url))
+		            		$('#searchResults').append('<div class="searchResultsItem"><div class="searchResultsImage"><img src="' + character.image.icon_url + '" /></div><div class="searchResultsText"><h1>' + character.name + '</h1><p>' + character.deck + '</p></div></div>');
+		            	}
+		            	else {
+		            		$('#searchResults').append('<div class="searchResultsItem"><div class="searchResultsImage"><img src="Images/question-mark.jpg"/></div><div class="searchResultsText"><h1>' + character.name + '</h1><p>' + character.deck + '</p></div></div>');
+		            	}
 		            });
 		        }
 		    });
 		}
     });
     $(document).on('click','.searchResultsItem', function() {
+    	$('.searchResultsItem').off( "click");
     	//console.log($('.searchResultsItem').index(this)-1);
         selectedCharacter = $('.searchResultsItem').index(this)-1;
+        $('.searchResultsItem').css("background-color","grey");
+        $("#loadingImage").show();
+        $("#chartArea").hide();
         singleCharacterSearch(characters[selectedCharacter].id);
     });
+
+    /*--- Display information modal box ---*/
+  	$("#info").click(function(){
+    	$(".overlay").fadeIn(1000);
+    	console.log("info clicked")
+  	});
+
+  	/*--- Hide information modal box ---*/
+  	$("a.close").click(function(){
+  		$(".overlay").fadeOut(1000);
+  	});
 });
 
 var singleCharacterSearch = function (characterID) {
@@ -63,6 +90,7 @@ var singleCharacterSearch = function (characterID) {
             gameYearQuery = 0;
             noDateAvailable = false;
             totalGames = data.results.games.length;
+            $('#numGames p').remove();
             $('#numGames').append('<p>' + data.results.name + ' appears in ' + totalGames + ' games</p>');
             $.each(data.results.games, function(index, characterGame) {
                 (function(index) {
@@ -80,7 +108,7 @@ var gameYearSearch = function (gameID) {
         crossDomain: true,
         jsonp: 'json_callback',
         limit:500,
-        url: 'http://www.giantbomb.com/api/game/3030-' + gameID +'/?api_key=' + apikey + '&format=jsonp', //retreieves a single game
+        url: 'http://www.giantbomb.com/api/game/3030-' + gameID +'/?api_key=' + apikey + '&format=jsonp&field_list=original_release_date,expected_release_year', //retreieves a single game
         complete: function() {
             updateChart();
         },
@@ -103,6 +131,9 @@ var updateChart = function () {
     gameYearQuery++;
     console.log(gameYearQuery);
     if (gameYearQuery == totalGames) {
+        $("#loadingImage").hide();
+    	$("#chartArea").show();
+    	$('.searchResultsItem').on( "click");
         var maxYear = parseInt(findMax());
         var minYear = parseInt(findMin());
         var ctx = $("#myChart").get(0).getContext("2d");

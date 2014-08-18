@@ -5,24 +5,59 @@
   <title>Giant Bomb Test</title>
   <script src="http://code.jquery.com/jquery-2.1.1.js"></script>
   <script src="app.js"></script>
-  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="css\main.css">
   <script src="js\Chart.js-master\Chart.js"></script>
 </head>
 <body>
+  <div id="topBar">
+    <div class="topBarContainer">&nbsp</div>
+    <div id="searchBox">
+        <h1>Character Search</h1>
+        <div id="searchInput">
+          <input id="characterSearch" type="text"/>
+          <button id="search">Search</button>
+        </div>
+    </div>
+    <div class="topBarContainer">
+      <div id="info">
+        <h6>Info</h6>
+    </div>    
+  </div>
+  <div id="bottomBar">
+  <div class="clearer"></div>
 	<div id="searchContainer">
-		<div id="searchBox">
-   			<h1>Character Search</h1>
-    		<input id="characterSearch" type="text" />
-        <button id="search">Search</button>
-		</div>
-    	<div id="numResults"></div>
+    	<div id="numResults"><p></p></div>
     	<div id="searchResults">
+        <div class="clearer"></div>
+        <div id="loadingImageResults"></div>
     		<div class="searchResultsItem"></div>
     	</div>
     </div>
-    <div id="resultsContainer">
+  <div id="resultsContainer">
     	<div id="numGames"></div>
-    	<canvas id="myChart" width="500" height="400"></canvas>
+      <div class="clearer"></div>
+      <div id="chartArea">
+    	 <canvas id="myChart" width="500" height="400"></canvas>
+      </div>
+      <div id="loadingImage">
+      </div>
     </div>
+  </div>
+  <!-- Modal Information Box -->
+    <div class="overlay" id="modal">
+        <div class="content">
+          <h3>What do I do?</h3>
+          <div>
+            <p>This webpage lets you see the number of games released each year for a given character</p>
+            <ul>
+              <li>1. Enter a <strong>character name</strong> in the search field and clck the search button.</li>
+              <li>2. On the left side of the screen <strong>search results</strong> will appear matching your character name.</li>
+              <li>3. Click on a character's description to see a <strong>graph</strong> of their game appearances on the right side.</li>
+            </ul>
+            <p>This search is powered by <a href="http://www.giantbomb.com">GiantBomb.com</a></p>
+            <a class="close" href="#">Got It!</a>
+          </div>
+        </div>
+      </div>
 </body>
 </html>
