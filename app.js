@@ -19,7 +19,12 @@ $(document).ready(function() {
     		$(".searchResultsItem").remove();
     		$('#searchResults').append('<div class="searchResultsItem"></div>');
     		$('#numResults').find('p').remove();
+    		$('.searchResultsItem').css({backgroundColor:"transparent"});
+        	$('#searchResults').css({backgroundColor:"transparent"});
     		$("#loadingImageResults").show();
+    		$("#loadingImage").hide();
+    		$("#chartArea").hide();
+    		$("#numGames").hide();
 		    $.ajax ({
 		        type: 'GET',
 		        dataType: 'jsonp',
@@ -55,7 +60,9 @@ $(document).ready(function() {
     	$('.searchResultsItem').off( "click");
     	//console.log($('.searchResultsItem').index(this)-1);
         selectedCharacter = $('.searchResultsItem').index(this)-1;
-        $('.searchResultsItem').css("background-color","grey");
+        $('.searchResultsItem').css({backgroundColor:"transparent"});
+        $('#searchResults').css({backgroundColor:"grey"});
+        $(this).css({backgroundColor:"white"});
         $("#loadingImage").show();
         $("#chartArea").hide();
         singleCharacterSearch(characters[selectedCharacter].id);
@@ -90,6 +97,7 @@ var singleCharacterSearch = function (characterID) {
             gameYearQuery = 0;
             noDateAvailable = false;
             totalGames = data.results.games.length;
+            $("#numGames").show();
             $('#numGames p').remove();
             $('#numGames').append('<p>' + data.results.name + ' appears in ' + totalGames + ' games</p>');
             $.each(data.results.games, function(index, characterGame) {

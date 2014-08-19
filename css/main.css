@@ -79,6 +79,12 @@ body {
 
 .clearer { clear: both; }
 
+.searchResultsItem:after {
+	content: "";
+  display: table;
+  clear: both;
+}
+
 #topBar {
 	width:100%;
 	position:relative;
